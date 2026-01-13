@@ -13,9 +13,9 @@ N_CHUNKS   = 6            # número de chunks na sessão
 MODEL_SIZE = 'base'       # whisper: 'tiny'|'base'|'small'|'medium'|'large'
 TARGET_LANGS = ['en', 'fr', 'de']  # idiomas de saída (tradução + voz)
 
-# ==========================================
+
 # 1) Login Hugging Face (opcional, mas recomendado para download estável)
-# ==========================================
+
 !pip install -q huggingface_hub
 from huggingface_hub import login
 
@@ -148,9 +148,9 @@ if wav_path is None:
 else:
     print("OK: áudio capturado e convertido para WAV:", wav_path)
 
-# ==========================================
+
 # 3) Whisper — transcrição em PT
-# ==========================================
+
 !pip install -q git+https://github.com/openai/whisper.git
 
 import whisper
@@ -161,9 +161,9 @@ def transcribe_audio(file_path, lang_in=LANG_INPUT):
     res = whisper_model.transcribe(file_path, fp16=False, language=lang_in)
     return res.get("text", "").strip()
 
-# ==========================================
+
 # 4) Tradução multilíngue (M2M100)
-# ==========================================
+
 !pip install -q transformers sentencepiece
 
 import torch
@@ -203,9 +203,9 @@ def translate_all_pt(text_pt: str):
     out_de = tr_pt_de(text_pt)[0]['translation_text']
     return {'en': out_en, 'fr': out_fr, 'de': out_de}
 
-# ==========================================
+
 # 5) Síntese de voz (gTTS)
-# ==========================================
+
 !pip install -q gTTS
 from gtts import gTTS
 from IPython.display import Audio, display
@@ -223,9 +223,9 @@ def speak(text, lang='en'):
     display(Audio(out_file, autoplay=True))
     return out_file
 
-# ==========================================
+
 # 6) Loop principal
-# ==========================================
+
 print(f"\n=== Tradução com M2M100 | Idiomas: {TARGET_LANGS} | Chunks: {N_CHUNKS} × {CHUNK_SEC}s ===")
 print("Fale algo em português e comece a falar imediatamente em cada chunk.")
 
